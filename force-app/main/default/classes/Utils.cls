@@ -26,6 +26,32 @@ public class Utils {
         return result;
     }
     
+        /**
+     * Returns random Decimal between 0 and range (inclusive)
+     */
+    public static Decimal getRandomDecimal(Decimal range)
+    {
+        Double result = -1;
+        while (result <= 0)
+        {
+            result = math.random() * (range);
+        }
+		return result;
+    }
+    
+    /**
+     * Returns random Integer between minNum and maxNum (inclusive)
+     */ 
+    public static Decimal getRandomDecimal(Decimal minNum, Decimal maxNum)
+    {
+        Decimal result = -1;
+        while(result < minNum || result > maxNum)
+        {
+            result = getRandomDecimal(maxNum+1);
+        }
+        return result;
+    }
+    
     /* 
      * Returns a set of numElementsToPull Integers between 0 and listSize (inclusive)
      */

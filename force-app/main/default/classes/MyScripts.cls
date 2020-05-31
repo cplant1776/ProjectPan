@@ -1,5 +1,5 @@
 public class MyScripts {
-/*
+
     
     public static void createInitialTestOrgData()
     {
@@ -94,5 +94,5 @@ public class MyScripts {
         delete stores;
         delete prods;
     }
-*/
+
 }
