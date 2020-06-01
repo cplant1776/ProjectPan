@@ -48,8 +48,9 @@ public with sharing class InventoryShuffleScheduler {
             System.debug('minutesBetweenShuffle: ' + minutesBetweenShuffle);
 
             // Schedule store shuffle
-            String cronID = System.scheduleBatch(new InventoryShuffler_BATCH(store.Id, quantityVariance, productVariance),
-            'Shuffle Inventory -' + store.Id, minutesBetweenShuffle);
+            Datetime sysTime = System.now();
+            String cronID = System.scheduleBatch(new InventoryShuffler(store.Id, quantityVariance, productVariance),
+            'Shuffle Inventory -' + store.Id + ' - ' + sysTime, minutesBetweenShuffle);
 
             System.debug('Scheduled job with Id: ' + cronId);
         }
@@ -61,6 +62,11 @@ public with sharing class InventoryShuffleScheduler {
     */ 
     public static void clearInventoryShuffle()
     {
-        // TODO: delete all scheduled jobs starting w/ 'Shuffle Inventory - '
+        List<CronTrigger> cronTriggers = [SELECT Id FROM CronTrigger 
+                                          WHERE CronJobDetail.Name LIKE '%Shuffle Inventory%'];
+            for(CronTrigger job : cronTriggers)
+            {
+                System.abortJob(job.Id);
+            }
     }
 }

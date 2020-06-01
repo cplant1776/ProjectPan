@@ -45,6 +45,16 @@ public class Utils_TEST {
         // Ensure no indices outside of range
         System.assertEquals(0, indices.size());
     }
+
+    @isTest
+    static void doesGetRandomSignReturnProperValues()
+    {
+        for(Integer i=0; i < 100; i++)
+        {
+            Integer randSign = Utils.getRandomSign();
+            System.assert(randSign == -1 || randSign == 1);
+        }
+    }
     
     /*
     @isTest

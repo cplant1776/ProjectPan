@@ -15,10 +15,35 @@ public with sharing class InventoryShuffleScheduler_TEST {
     @isTest
     static void doesScheduleShufflesScheduleAllStores()
     {
-        // InventoryShuffleScheduler shuffler = new InventoryShuffleScheduler(0.1, 0.2, 0.3, 0.4);
-        // Test.startTest();
-        // shuffler.scheduleShuffles();
-        
-        // Test.stopTest();
+        List<CronJobDetail> jobs = [SELECT Id, Name, JobType FROM CronJobDetail];
+        System.assertEquals(0, jobs.size());
+
+        InventoryShuffleScheduler shuffler = new InventoryShuffleScheduler(0.1, 0.2, 0.3, 0.4);
+
+        Test.startTest();
+        shuffler.scheduleShuffles();
+
+        jobs = [SELECT Id, Name, JobType FROM CronJobDetail];
+        System.assertEquals(NUM_OF_STORES, jobs.size());
+        Test.stopTest();
+    }
+
+    @isTest
+    static void doesClearInventoryShuffleRemoveAllShuffleJobs()
+    {
+        InventoryShuffleScheduler shuffler = new InventoryShuffleScheduler(0.1, 0.2, 0.3, 0.4);
+        Test.startTest();
+        shuffler.scheduleShuffles();
+
+        // Ensure jobs were scheduled
+        List<CronJobDetail> jobs = [SELECT Id, Name, JobType FROM CronJobDetail];
+        System.assertEquals(NUM_OF_STORES, jobs.size());
+
+        InventoryShuffleScheduler.clearInventoryShuffle();
+
+        // Ensure jobs were cleared
+        jobs = [SELECT Id, Name, JobType FROM CronJobDetail];
+        System.assertEquals(0, jobs.size());
+        Test.stopTest();
     }
 }

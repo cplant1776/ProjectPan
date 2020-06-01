@@ -5,9 +5,12 @@
 // You can also execute the entire file by running the command:
 //     SFDX: Execute Anonymous Apex with Editor Contents
 
-List<Account> accsToDelete = [SELECT Name, Id FROM Account WHERE (NOT Name LIKE '%Store%')];
-for(Account acc : accsToDelete)
+List<CronJobDetail> details = [SELECT Id, Name, JobType
+FROM CronJobDetail
+WHERE Name LIKE '%Shuffle Inventory%'];
+
+System.debug(details);
+for(CronJobDetail detail : details)
 {
-    System.debug(acc.Name);
+    System.debug(detail.Name);
 }
-System.Database.Delete(accsToDelete);

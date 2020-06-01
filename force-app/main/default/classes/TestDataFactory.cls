@@ -12,7 +12,8 @@ public class TestDataFactory {
         {
             prods.add(new Stocked_Product__c(Name = 'Product' + i,
                                              Category__c = 'Category' + Utils.getRandomInteger(1, MAX_NUM_CATEGORIES),
-                                             Brand__c = 'Brand' + Utils.getrandomInteger(1, MAX_NUM_BRANDS)
+                                             Brand__c = 'Brand' + Utils.getrandomInteger(1, MAX_NUM_BRANDS),
+                                             Product_Ex_Id__c = 'ExId' + i
                                             ));
         }
         
