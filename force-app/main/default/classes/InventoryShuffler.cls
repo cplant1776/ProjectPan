@@ -35,20 +35,24 @@ global with sharing class InventoryShuffler implements Database.Batchable<SObjec
     }
 
     global void execute(Database.BatchableContext bc, List<Store_Product__c> scope){
+        // Declarations
+        List<Store_Product__c> updatedProds = new List<Store_Product__c>();
+        
         for(Store_Product__c product : scope)
         {
             if(prodsChanged <= prodsToChange)
             {
-                // Either increases or decreases quantity by Quantity__c*quantityVariance for product
+                // Either increases or decreases quantity by Quantity__c*quantityVariance
                 product.Quantity__c = product.Quantity__c + (product.Quantity__c * this.quantityVariance * Utils.getRandomSign());
                 prodsChanged++;
+                updatedProds.add(product);
             }
             else { // enough products already changed; don't change any more
                 break;
             }
         }
 
-        update scope;
+        update updatedProds;
     }    
 
     global void finish(Database.BatchableContext bc){

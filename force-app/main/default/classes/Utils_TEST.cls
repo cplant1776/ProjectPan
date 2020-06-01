@@ -56,28 +56,4 @@ public class Utils_TEST {
         }
     }
     
-    /*
-    @isTest
-    private static void doesGetRandomElementPullSingleValueFromList()
-    {
-        List<String> input = new List<String>{'hello', 'world', '!'};
-            String randElm = (String)Utils.getRandomElement(input);
-        System.assert(input.contains(randElm));
-    }
-    
-    @isTest
-    private static void doesGetRandomElementsPullProperValuesFromList()
-    {
-        Integer numOfElements = 2;
-        List<String> input = new List<String>{'hello', 'world', '!'};
-            List<String> randElms = (List<String>)Utils.getRandomElements(input, numOfElements);
-        
-        System.assertEquals(numOfElements, randElms.size());
-        for(String s : randElms)
-        {
-            System.assert(input.contains(s));
-        }
-        
-    }
-    */
 }

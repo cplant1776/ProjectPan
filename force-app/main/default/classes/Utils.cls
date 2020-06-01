@@ -81,42 +81,4 @@ public class Utils {
         
     }
     
-    /* 
-     * Return a list of numOfElements random Objects from objs
-     *
-    public static List<Object> getRandomElements(List<Object> objs, Integer numOfElements, SObjectType objectType)
-    {
-        List<SObject> castRecords = (List<SObject>)Type.forName(listType).newInstance();
-        List<Object> result = new List<Object>();
-        
-        Set<Integer> indices = getRandomIndices(objs.size(), numOfElements);
-        for(Integer index : indices)
-        {
-            result.add(objs[index]);
-        }
-        
-        return result;
-    }
-    
-    /* 
-     * Return a list of numOfElements random Objects from objs
-     *
-    public static Object getRandomElement(List<Object> objs)
-    {
-        return objs[getRandomInteger(objs.size() - 1)];
-    }
-    */
-
-    
-    /*
-     * Simply prints a list of the passed list
-     */
-    public static void printList(List<Object> objs)
-    {
-        for(Object obj : objs)
-        {
-            System.debug(obj);
-        }
-    }
-    
 }

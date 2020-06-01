@@ -18,32 +18,20 @@ public with sharing class InventoryShuffler_TEST {
         Account randomStore = [SELECT Id FROM Account WHERE Name LIKE '%Store%' LIMIT 1];
         
         Test.startTest();
-        String cronId = System.scheduleBatch(new InventoryShuffler(randomStore.Id, 0.2, 0.3),
-                                             'Old and Busted' + randomStore.Id, 1);
+        InventoryShuffler shuffler = new InventoryShuffler(randomStore.Id, 0.2, 0.3);
+        String cronId = Database.executeBatch(shuffler);
         
-        // Ensure job was scheduled
-        //CronTrigger ct = [SELECT Id, TimesTriggered, NextFireTime
-        //       FROM CronTrigger WHERE Id = :cronID];
-        List<CronTrigger> ct = [SELECT Id, TimesTriggered, NextFireTime
+        // Ensure no jobs were scheduled to begin with
+        List<CronTrigger> jobs = [SELECT Id, TimesTriggered, NextFireTime
                                 FROM CronTrigger];
-        for(CronTrigger t : ct)
-        {
-            System.debug('TimesTriggered: ' + t.TimesTriggered);
-            System.debug('NextFireTime: ' + t.NextFireTime);
-                }
-        //DateTime oldFireTime = ct.NextFireTime;
+        System.assertEquals(0, jobs.size());
         
         Test.stopTest();
         
-        //Ensure job was REscheduled
-        ct = [SELECT Id, TimesTriggered, NextFireTime
+        //Ensure job was scheduled after finishing
+        jobs = [SELECT Id, TimesTriggered, NextFireTime
               FROM CronTrigger];
-        for(CronTrigger t : ct)
-        {
-            System.debug('TimesTriggered: ' + t.TimesTriggered);
-            System.debug('NextFireTime: ' + t.NextFireTime);
-                }
-        //System.assertNotEquals(oldFireTime, ct.NextFireTime);
+        System.assertEquals(1, jobs.size());
     }
     
     @isTest
@@ -52,9 +40,10 @@ public with sharing class InventoryShuffler_TEST {
         Account randomStore = [SELECT Id FROM Account WHERE Name LIKE '%Store%' LIMIT 1];
         Map<Id, Store_Product__c> oldStoreProdsById = new Map<Id, Store_Product__c>([SELECT Id, Quantity__c, Store__c FROM Store_Product__c
                                                                                      WHERE Store__c = :randomStore.Id]);
+        
         Test.startTest();
-        System.scheduleBatch(new InventoryShuffler(randomStore.Id, 0.2, 0.3),
-                             'Shuffle Inventory -' + randomStore.Id, 1);
+        InventoryShuffler shuffler = new InventoryShuffler(randomStore.Id, 0.2, 0.3);
+        String batchId = Database.executeBatch(shuffler);
         Test.stopTest();
         
         // Compare old and new quantities looking for differences
