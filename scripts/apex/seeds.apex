@@ -63,3 +63,14 @@ List<Stocked_Product__c> prods = [SELECT Id FROM Stocked_Product__c];
 delete storeProducts;
 delete stores;
 delete prods;
+
+
+// ==== PURGE DEFAULT DATA ==== //
+List<Case> cases = [SELECT Id FROM Case];
+delete cases;
+List<Contact> contacts = [SELECT Id FROM Contact];
+delete contacts;
+List<Opportunity> opps = [SELECT Id FROM Opportunity];
+delete opps;
+List<Account> accs = [SELECT Id FROM Account WHERE (NOT Name LIKE '%Store%')];
+delete accs;

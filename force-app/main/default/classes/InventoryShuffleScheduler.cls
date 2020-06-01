@@ -31,7 +31,7 @@ public with sharing class InventoryShuffleScheduler {
     *   Schedules all stores to update their inventory at varying times
     */
     public void scheduleShuffles() {
-        List<Account> stores = [SELECT Name, Id FROM Account WHERE Name LIKE '%Store%'];
+        List<Account> stores = [SELECT Name, Id FROM Account];
         
         for(Account store : stores)
         {

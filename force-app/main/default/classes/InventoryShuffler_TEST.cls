@@ -15,7 +15,7 @@ public with sharing class InventoryShuffler_TEST {
     @isTest
     static void doesInventoryShufflerRescheduleItself()
     {
-        Account randomStore = [SELECT Id FROM Account WHERE Name LIKE '%Store%' LIMIT 1];
+        Account randomStore = [SELECT Id FROM Account LIMIT 1];
         
         Test.startTest();
         InventoryShuffler shuffler = new InventoryShuffler(randomStore.Id, 0.2, 0.3);
@@ -37,7 +37,7 @@ public with sharing class InventoryShuffler_TEST {
     @isTest
     static void doesInventoryShufflerAdjustProductQuantity()
     {
-        Account randomStore = [SELECT Id FROM Account WHERE Name LIKE '%Store%' LIMIT 1];
+        Account randomStore = [SELECT Id FROM Account LIMIT 1];
         Map<Id, Store_Product__c> oldStoreProdsById = new Map<Id, Store_Product__c>([SELECT Id, Quantity__c, Store__c FROM Store_Product__c
                                                                                      WHERE Store__c = :randomStore.Id
                                                                                      AND Is_External_Product__c = True]);
