@@ -30,7 +30,7 @@ public class TestDataFactory {
         System.Database.insert(stores);
     }
     
-    public static void createStoreProducts(Integer numOfProds)
+    public static void createExternalStoreProducts(Integer numOfProds)
     {
         List<Store_Product__c> storeProducts = new List<Store_Product__c>();
         List<Account> stores = [SELECT Id FROM Account];
@@ -41,7 +41,8 @@ public class TestDataFactory {
             storeProducts.add(new Store_Product__c(Name = 'Stock' + i,
                                                    Quantity__c = Utils.getRandomInteger(MAX_QUANTITY),
                                                    Store__c = getRandomStore(stores).id,
-                                                   Product__c = getRandomProduct(stockedProds).id));
+                                                   Product__c = getRandomProduct(stockedProds).id,
+                                                   Is_External_Product__c = True));
         }
         
         System.Database.insert(storeProducts);

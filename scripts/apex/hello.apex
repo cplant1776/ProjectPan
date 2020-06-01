@@ -5,12 +5,9 @@
 // You can also execute the entire file by running the command:
 //     SFDX: Execute Anonymous Apex with Editor Contents
 
-List<CronJobDetail> details = [SELECT Id, Name, JobType
-FROM CronJobDetail
-WHERE Name LIKE '%Shuffle Inventory%'];
-
-System.debug(details);
-for(CronJobDetail detail : details)
+List<Store_Product__c> prods = [SELECT Id, Is_External_Product__c FROM Store_Product__c];
+for(Store_Product__c prod : prods)
 {
-    System.debug(detail.Name);
+    prod.Is_External_Product__c = True;
 }
+update prods;

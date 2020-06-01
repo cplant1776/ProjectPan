@@ -21,17 +21,18 @@ global with sharing class InventoryShuffler implements Database.Batchable<SObjec
     global Database.QueryLocator start(Database.BatchableContext bc) {
 
         // Calculate total # of products whose quantity we will change
-        Integer totalProds = [SELECT COUNT() FROM Store_Product__c WHERE Store__c = :this.storeId];
+        Integer totalProds = [SELECT COUNT() FROM Store_Product__c WHERE Store__c = :this.storeId
+                                                                   AND Is_External_Product__c = True];
         this.prodsToChange = (totalProds * this.productVariance).intValue();
         
         System.debug('Total Products to update: ' + totalProds);
+        String query = 'SELECT Id, Quantity__c ' +
+           'FROM Store_Product__c ' +
+           'WHERE Store__c = :storeId ' +
+           'AND Is_External_Product__c = True';
         
         // Pull out records to operate on
-       return Database.getQueryLocator(
-           'SELECT Id, Quantity__c ' +
-           'FROM Store_Product__c ' +
-           'WHERE Store__c = :storeId'
-       );
+       return Database.getQueryLocator(query);
     }
 
     global void execute(Database.BatchableContext bc, List<Store_Product__c> scope){

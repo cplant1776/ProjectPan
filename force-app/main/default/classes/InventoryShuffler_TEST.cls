@@ -9,7 +9,7 @@ public with sharing class InventoryShuffler_TEST {
     static void makeData(){
         TestDataFactory.createStockedProducts(NUM_OF_STOCKED_PRODUCTS);
         TestDataFactory.createStores(NUM_OF_STORES);
-        TestDataFactory.createStoreProducts(NUM_OF_STORE_PRODS);
+        TestDataFactory.createExternalStoreProducts(NUM_OF_STORE_PRODS);
     }
     
     @isTest
@@ -39,7 +39,8 @@ public with sharing class InventoryShuffler_TEST {
     {
         Account randomStore = [SELECT Id FROM Account WHERE Name LIKE '%Store%' LIMIT 1];
         Map<Id, Store_Product__c> oldStoreProdsById = new Map<Id, Store_Product__c>([SELECT Id, Quantity__c, Store__c FROM Store_Product__c
-                                                                                     WHERE Store__c = :randomStore.Id]);
+                                                                                     WHERE Store__c = :randomStore.Id
+                                                                                     AND Is_External_Product__c = True]);
         
         Test.startTest();
         InventoryShuffler shuffler = new InventoryShuffler(randomStore.Id, 0.2, 0.3);
@@ -49,7 +50,8 @@ public with sharing class InventoryShuffler_TEST {
         // Compare old and new quantities looking for differences
         Boolean foundChangedQuantity = false;
         Map<Id, Store_Product__c> updatedStoreProdsById = new Map<Id, Store_Product__c>([SELECT Id, Quantity__c, Store__c FROM Store_Product__c
-                                                                                         WHERE Store__c = :randomStore.Id]);
+                                                                                         WHERE Store__c = :randomStore.Id
+                                                                                         AND Is_External_Product__c = True]);
         for(Id prodId : updatedStoreProdsById.keySet())
         {
             if(oldStoreProdsById.get(prodId).Quantity__c != updatedStoreProdsById.get(prodId).Quantity__c)

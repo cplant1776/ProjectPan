@@ -9,7 +9,7 @@ public with sharing class InventoryShuffleScheduler_TEST {
     static void makeData(){
         TestDataFactory.createStockedProducts(NUM_OF_STOCKED_PRODUCTS);
         TestDataFactory.createStores(NUM_OF_STORES);
-        TestDataFactory.createStoreProducts(NUM_OF_STORE_PRODS);
+        TestDataFactory.createExternalStoreProducts(NUM_OF_STORE_PRODS);
     }
     
     @isTest
