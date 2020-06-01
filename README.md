@@ -1,9 +1,9 @@
-# Too Be Filled Out (being lazy)
+# To Be Filled Out (being lazy)
 
 ## Todo
 
-* Create tests for Utils.getRandomDecimal()
 * Create tests for InventoryShuffleScheduler()
+* Create test for Utils.getRandomSign()
 * Implement InventoryShuffleScheduler.clearInventoryShuffle()
 * Create test for InventoryShuffleScheduler.clearInventoryShuffle()
 * Implement InventoryShuffler.execute()

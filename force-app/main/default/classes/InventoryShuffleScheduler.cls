@@ -1,8 +1,10 @@
 public with sharing class InventoryShuffleScheduler {
 
+    // Constants
     private final Integer MIN_TIME_VARIANCE = 20;
     private final Integer MAX_TIME_VARIANCE = 80;
 
+    // Member variables
     private final Decimal minQuantityVariance;
     private final Decimal maxQuantityVariance;
     private final Decimal minProductVariance;
@@ -22,26 +24,34 @@ public with sharing class InventoryShuffleScheduler {
         this.maxQuantityVariance = maxQtyVar;
         this.minProductVariance = minProdVar;
         this.maxProductVariance = maxprodVar;
-
-        this.scheduleShuffles();
+        System.debug('InventoryShuffleScheduler initialized.');
     }
 
     /*
-    *   Run to schedule all stores to update their inventory at varying frequencies
+    *   Schedules all stores to update their inventory at varying times
     */
     public void scheduleShuffles() {
         List<Account> stores = [SELECT Name, Id FROM Account WHERE Name LIKE '%Store%'];
+        
         for(Account store : stores)
         {
-            Decimal quanityVariance = Utils.getRandomDecimal(minQuantityVariance, maxQuantityVariance);
-            Decimal productVariance = Utils.getRandomDecimal(maxProductVariance, maxProductVariance);
+            System.debug('Initial scheduling for ' + store.Name + '. . .');
+            
+            // Generate random parameter values
+            Decimal quantityVariance = Utils.getRandomDecimal(minQuantityVariance, maxQuantityVariance);
+            Decimal productVariance = Utils.getRandomDecimal(minProductVariance, maxProductVariance);
             Integer minutesBetweenShuffle = Utils.getRandomInteger(MIN_TIME_VARIANCE, MAX_TIME_VARIANCE);
-            String cronStr = '0 0/' + minutesBetweenShuffle + ' * 1/1 * ? *'; // Easy cron creation: http://www.cronmaker.com/
 
+			// Debug printouts            
+            System.debug('qtyVar: ' + quantityVariance);
+            System.debug('productVariance: ' + productVariance);
+            System.debug('minutesBetweenShuffle: ' + minutesBetweenShuffle);
 
-            InventoryShuffler shuffler = new InventoryShuffler(store, quanityVariance, productVariance);
-            String jobName = 'Shuffle Inventory - ' + store.Name;
-            System.schedule(jobName, cronStr, shuffler);
+            // Schedule store shuffle
+            String cronID = System.scheduleBatch(new InventoryShuffler_BATCH(store.Id, quantityVariance, productVariance),
+            'Shuffle Inventory -' + store.Id, minutesBetweenShuffle);
+
+            System.debug('Scheduled job with Id: ' + cronId);
         }
 
     }

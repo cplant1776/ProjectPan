@@ -14,5 +14,6 @@ global class InventoryShuffler implements Schedulable{
     global void execute(SchedulableContext sc)
     {
         // TODO: Adjust inventory
+        System.debug('hello!');
     }
 }

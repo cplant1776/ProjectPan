@@ -1,31 +1,33 @@
 @isTest
 public class Utils_TEST {
     
-    private static Integer MIN_RAND_INT_VALUE = 2;
-    private static Integer MAX_RAND_INT_VALUE = 6;
+    private static Integer MIN_RAND_NUM_VALUE = 2;
+    private static Integer MAX_RAND_NUM_VALUE = 6;
+    private static Decimal MIN_RAND_DEC_VALUE = 0.2;
+    private static Decimal MAX_RAND_DEC_VALUE = 0.6;
+    
     private static Integer NUM_OF_GENERATED_INDICES = 10;
     
     @isTest
     private static void doesGetRandomIntegerReturnProperRange()
-    {
-        // Bools to ensure range is inclusive
-        Boolean maxNumWasReturned = False;
-        Boolean minNumWasReturned = False;
-        
+    {  
         for(Integer i=0; i < 100; i++)
         {
             // Generate random int and check if its in correct range
-            Integer randInt = Utils.getRandomInteger(MIN_RAND_INT_VALUE, MAX_RAND_INT_VALUE);
-            System.assert(randInt >= MIN_RAND_INT_VALUE && randInt <= MAX_RAND_INT_VALUE);
-            
-            // If min or max value generated, toggle Boolean
-            if(randInt == MIN_RAND_INT_VALUE)
-                minNumWasReturned = True;
-            if(randInt == MAX_RAND_INT_VALUE)
-                maxNumWasReturned = True;
+            Integer randInt = Utils.getRandomInteger(MIN_RAND_NUM_VALUE, MAX_RAND_NUM_VALUE);
+            System.assert(randInt >= MIN_RAND_NUM_VALUE && randInt <= MAX_RAND_NUM_VALUE);
         }
-        
-        System.assert(minNumWasReturned && maxNumWasReturned);
+    }
+
+    @isTest
+    private static void doesGetRandomDecimalReturnProperRange()
+    {
+        for(Integer i=0; i < 100; i++)
+        {
+            // Generate random int and check if its in correct range
+            Decimal randDec = Utils.getRandomDecimal(MIN_RAND_DEC_VALUE, MAX_RAND_DEC_VALUE);
+            System.assert(randDec >= MIN_RAND_DEC_VALUE && randDec <= MAX_RAND_DEC_VALUE);
+        }
     }
     
     @isTest
@@ -44,6 +46,7 @@ public class Utils_TEST {
         System.assertEquals(0, indices.size());
     }
     
+    /*
     @isTest
     private static void doesGetRandomElementPullSingleValueFromList()
     {
@@ -66,4 +69,5 @@ public class Utils_TEST {
         }
         
     }
+    */
 }

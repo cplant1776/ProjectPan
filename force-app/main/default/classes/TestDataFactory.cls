@@ -39,8 +39,8 @@ public class TestDataFactory {
         {
             storeProducts.add(new Store_Product__c(Name = 'Stock' + i,
                                                    Quantity__c = Utils.getRandomInteger(MAX_QUANTITY),
-                                                   Store__c = stores[0].id,
-                                                   Product__c = stockedProds[0].id));
+                                                   Store__c = getRandomStore(stores).id,
+                                                   Product__c = getRandomProduct(stockedProds).id));
         }
         
         System.Database.insert(storeProducts);
@@ -53,7 +53,7 @@ public class TestDataFactory {
         return stores[Utils.getRandomInteger(stores.size() - 1)];
     }
     
-    private static Stocked_Product__c getRandomStore(List<Stocked_Product__c> prods)
+    private static Stocked_Product__c getRandomProduct(List<Stocked_Product__c> prods)
     {
         return prods[Utils.getRandomInteger(prods.size() - 1)];
     }

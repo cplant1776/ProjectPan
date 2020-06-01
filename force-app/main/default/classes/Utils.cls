@@ -31,8 +31,8 @@ public class Utils {
      */
     public static Decimal getRandomDecimal(Decimal range)
     {
-        Double result = -1;
-        while (result <= 0)
+        Decimal result = -1;
+        while (result < 0)
         {
             result = math.random() * (range);
         }
@@ -47,7 +47,7 @@ public class Utils {
         Decimal result = -1;
         while(result < minNum || result > maxNum)
         {
-            result = getRandomDecimal(maxNum+1);
+            result = getRandomDecimal(maxNum);
         }
         return result;
     }
@@ -63,6 +63,22 @@ public class Utils {
             result.add(getRandomInteger(listSize));
         }
         return result;
+    }
+    
+    /*
+     * Return either 1 or -1. 50/50 chance either way... in theory
+     */ 
+    public static Integer getRandomSign()
+    {
+        if (Math.random() > 0.5)
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+        
     }
     
     /* 
