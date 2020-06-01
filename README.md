@@ -2,4 +2,4 @@
 
 ## Todo
 
-* Correct tests for InventoryShuffler class
+* Add REST endpoints to sync inventory
