@@ -15,10 +15,10 @@ public with sharing class InventoryShuffler_TEST {
     @isTest
     static void doesInventoryShufflerRescheduleItself()
     {
-        Account randomStore = [SELECT Id FROM Account LIMIT 1];
+        Account randomStore = [SELECT Id, Name, Total_Product__c FROM Account LIMIT 1];
         
         Test.startTest();
-        InventoryShuffler shuffler = new InventoryShuffler(randomStore.Id, 0.2, 0.3);
+        InventoryShuffler shuffler = new InventoryShuffler(randomStore, 0.2, 0.3);
         String cronId = Database.executeBatch(shuffler);
         
         // Ensure no jobs were scheduled to begin with
@@ -37,13 +37,13 @@ public with sharing class InventoryShuffler_TEST {
     @isTest
     static void doesInventoryShufflerAdjustProductQuantity()
     {
-        Account randomStore = [SELECT Id FROM Account LIMIT 1];
+        Account randomStore = [SELECT Id, Name, Total_Product__c FROM Account LIMIT 1];
         Map<Id, Store_Product__c> oldStoreProdsById = new Map<Id, Store_Product__c>([SELECT Id, Quantity__c, Store__c FROM Store_Product__c
                                                                                      WHERE Store__c = :randomStore.Id
                                                                                      AND Is_External_Product__c = True]);
         
         Test.startTest();
-        InventoryShuffler shuffler = new InventoryShuffler(randomStore.Id, 0.2, 0.3);
+        InventoryShuffler shuffler = new InventoryShuffler(randomStore, 0.2, 0.3);
         String batchId = Database.executeBatch(shuffler);
         Test.stopTest();
         

@@ -5,15 +5,15 @@ global with sharing class InventoryShuffler implements Database.Batchable<SObjec
     private final Integer MAX_TIME_VARIANCE = 80;
 
     // Class members
-    private Id storeId;
+    private Account store;
     private Decimal quantityVariance;
     private Decimal productVariance;
     private Integer prodsToChange = 0;
     private Integer prodsChanged = 0;
     
-    public InventoryShuffler(Id storeId, Decimal quantityVariance, Decimal productVariance)
+    public InventoryShuffler(Account store, Decimal quantityVariance, Decimal productVariance)
     {
-        this.storeId = storeId;
+        this.store = store;
         this.quantityVariance = quantityVariance;
         this.productVariance = productVariance;
     }
@@ -21,11 +21,13 @@ global with sharing class InventoryShuffler implements Database.Batchable<SObjec
     global Database.QueryLocator start(Database.BatchableContext bc) {
 
         // Calculate total # of products whose quantity we will change
-        Integer totalProds = [SELECT COUNT() FROM Store_Product__c WHERE Store__c = :this.storeId
-                                                                   AND Is_External_Product__c = True];
-        this.prodsToChange = (totalProds * this.productVariance).intValue();
+        //Integer totalProds = [SELECT COUNT() FROM Store_Product__c WHERE Store__c = :this.store.Id
+        //                                                           AND Is_External_Product__c = True];
+                                                                   
+        this.prodsToChange = (this.store.Total_Product__c * this.productVariance).intValue();
         
-        System.debug('Total Products to update: ' + totalProds);
+        //System.debug('Total Products to update: ' + this.store.TotalProduct__c);
+        Id storeId = this.store.Id;
         String query = 'SELECT Id, Quantity__c ' +
            'FROM Store_Product__c ' +
            'WHERE Store__c = :storeId ' +
@@ -64,9 +66,9 @@ global with sharing class InventoryShuffler implements Database.Batchable<SObjec
         if(thisJob.Status == 'Completed')
         {
             Integer minutesBetweenShuffle = Utils.getRandomInteger(MIN_TIME_VARIANCE, MAX_TIME_VARIANCE);
-            Datetime sysTime = System.now().addSeconds(Utils.getRandomInteger(5));
-            System.scheduleBatch(new InventoryShuffler(this.storeId, this.quantityVariance, this.productVariance),
-            'Shuffle Inventory -' + this.storeId + ' - ' + sysTime, minutesBetweenShuffle);
+            Datetime sysTime = System.now().addSeconds(Utils.getRandomInteger(10));
+            System.scheduleBatch(new InventoryShuffler(this.store, this.quantityVariance, this.productVariance),
+            'Shuffle Inventory -' + this.store.Id + ' - ' + sysTime, minutesBetweenShuffle);
         }
         
     }    

@@ -31,7 +31,7 @@ public with sharing class InventoryShuffleScheduler {
     *   Schedules all stores to update their inventory at varying times
     */
     public void scheduleShuffles() {
-        List<Account> stores = [SELECT Name, Id FROM Account];
+        List<Account> stores = [SELECT Id, Name, Total_Product__c FROM Account];
         
         for(Account store : stores)
         {
@@ -49,7 +49,7 @@ public with sharing class InventoryShuffleScheduler {
 
             // Schedule store shuffle
             Datetime sysTime = System.now();
-            String cronID = System.scheduleBatch(new InventoryShuffler(store.Id, quantityVariance, productVariance),
+            String cronID = System.scheduleBatch(new InventoryShuffler(store, quantityVariance, productVariance),
             'Shuffle Inventory -' + store.Id + ' - ' + sysTime, minutesBetweenShuffle);
 
             System.debug('Scheduled job with Id: ' + cronId);
